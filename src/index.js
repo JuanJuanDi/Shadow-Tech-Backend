@@ -1,9 +1,13 @@
 const express = require( 'express' );
 const app = express();
-        //ruta, importacion
+const {dbConnection} = require('./config/mongo.confing'); //importamos la configuracion de mongoose para mongo
+
+//ruta, importacion
         //->http://locahost:3000/apis/product/
 app.use('/api/products' , require('./routes/product.routes'))
 
+// invoca la configuracion de la base de datos para establecer la configuracion     
+dbConnection()
 
            //purto, callback
 app.listen(3000, function(){
