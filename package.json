@@ -4,7 +4,7 @@
   "description": "tienda para vender productos y componentes electroniscos ",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch ./src/index.js"
+    "dev": "node --env-file .env --watch ./src/index.js"
   },
   "keywords": [
     "node",
