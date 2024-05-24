@@ -1,5 +1,23 @@
-function createProduct(request, response){
-    response.json({msg: 'crea un producto nuevo' })
+const { createOneProduct } = require("../services/product.service")
+
+async function createProduct(request, response){
+
+    const newProduct = request.body;
+    //aqui voy a invocar el servicio
+    try {
+        const ProductRegistered = await createOneProduct( newProduct )
+        response.json({
+            ok: true,
+            data: ProductRegistered
+            })
+
+    } catch (error) {
+        console.log( error );
+        response.json({
+            ok:false,
+            msg:'falla el registro del producto'
+        });
+    }
 }
     
 
