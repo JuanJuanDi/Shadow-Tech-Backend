@@ -12,7 +12,7 @@ async function dbConnection(){
         throw new Error(' Error al inicializar la base de datos')    
     }
 }
-
+    
 module.exports = {
     dbConnection
 }

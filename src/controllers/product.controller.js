@@ -1,4 +1,4 @@
-const { createOneProduct } = require("../services/product.service")
+const { createOneProduct, getAllProduct, getOneProductById, removeOneProduct, updateOneProduct } = require("../services/product.service")
 
 async function createProduct(request, response){
 
@@ -15,29 +15,90 @@ async function createProduct(request, response){
         console.log( error );
         response.json({
             ok:false,
-            msg:'falla el registro del producto'
+            msg:'falla al registrar el producto'
         });
     }
 }
+
+async function getProducts(request, response){
+
+    try {
+        const product = await getAllProduct()
+        response.json({
+            ok: true,
+            data: product
+
+        })
+    } catch (error) {
+        console.error(error)
+        response.json({
+            ok: false,
+            msg:'Error al optener todos los productos'
+        })
+    }
     
+}
+async function getProductById(request, response){
+    const id = request.params.id; 
 
-function getProducts(request, response){
-    response.json({ msg: 'obtiene todos los productos'})
+    try {
+        const data = await getOneProductById(id)// con esto estoy cacturando el aid del producto que biene cona la url
+    response.json({
+        ok:true,
+        data
+    })
+    } catch (error) {
+        console.error(error)
+        response.json({
+            ok: false,
+            msg:'Error al optener un producto por su ID'
+        });
+    }
+    
 }
 
-function getProductByid(){}
-
-function updateProductByid(request, response){
-    response.json({msg: 'actualiza un producto por su ID'}) //put actualiza todas 
+async function updateProductByid(request, response){
+    const id = request.params.id
+    const inputData = request.body
+    try {
+        const data = await updateOneProduct(id, inputData)
+        response.json({
+            ok: true,
+            data
+        }) 
+    } catch (error) {
+        console.error(error)
+        response.json({
+            ok:false,
+            msg: 'No se pudo actualizar el producto por ID'
+        })
+    }
 }
-function deleteProductByid(request, response){
-    response.json({msg: 'eliminar un producto por su ID'})
+async function deleteProductByid(request, response){
+        const id = request.params.id;
+    
+        try {
+        const data = await removeOneProduct(id)
+
+        response.json({
+            ok: true,
+            data
+        })
+        } catch (error) {
+            console.error(error)
+                response.json({
+                    ok: false,
+                    msg: 'Error al eliminar un producto por ID'
+                }
+            )
+        }
+    
 }
 
 module.exports = {
     createProduct,
     getProducts,
-    getProductByid,
     updateProductByid,
-    deleteProductByid
+    deleteProductByid,
+    getProductById
 };
