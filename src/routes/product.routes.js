@@ -12,6 +12,7 @@ router.post('/', createProduct)
 router.get('/', getProducts);
 router.get('/:id', getProductById);
 
+
 //U: Update ->http://locahost:3000/apis/product/<espera-por-ID>
 // router.put('/:id',updateProductByid)
 
