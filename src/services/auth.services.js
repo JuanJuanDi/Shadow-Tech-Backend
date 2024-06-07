@@ -1,5 +1,6 @@
 const { genSaltSync, hashSync } = require("bcrypt");
-const UserModel = require("../models/User")
+const UserModel = require("../models/User");
+const { generateToken } = require("../helpers/jwt.helpers");
 
 async function findUserByUsername( username){
     return await UserModel.findOne({username})
@@ -14,9 +15,9 @@ function registerUser(newUser){
 
     dbUser.save();
 
+    const token = generateToken();
 
-
-    res.json({ok: true,msg:'Usuario registrado exitosamente'})
+    res.json({ok: true,msg:'Usuario registrado exitosamente', token})
 }
 
 module.exports = {

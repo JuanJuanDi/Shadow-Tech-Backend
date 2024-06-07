@@ -1,7 +1,6 @@
 const { compareSync } = require("bcrypt");
-const UserModel = require("../models/User")
 const { findUserByUsername, registerUser } = require("../services/auth.services");
-const { generateToken } = require("../config/helpers/jwt.helpers");
+const { generateToken } = require("../helpers/jwt.helpers");
 
 
 async function login(req, res){
