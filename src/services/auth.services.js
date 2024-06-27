@@ -1,10 +1,8 @@
 const { genSaltSync, hashSync } = require("bcrypt");
 const UserModel = require("../models/User");
-const { generateToken } = require("../helpers/jwt.helpers");
-const RoleModel = require("../models/Role");
 
-async function findUserByUsername( username){
-    return await UserModel.findOne({username})
+async function findUserByUsername(email){
+    return await UserModel.findOne({email})
 }
 
 async function registerUser(newUser){

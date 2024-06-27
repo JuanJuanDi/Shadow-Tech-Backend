@@ -1,14 +1,14 @@
 const { compareSync } = require("bcrypt");
 const { findUserByUsername, registerUser } = require("../services/auth.services");
 const { generateToken } = require("../helpers/jwt.helpers");
-const RoleModel = require("../models/Role");
-const { sign } = require("jsonwebtoken");
+
+
 
 
 async function login(req, res){
     const inputData = req.body
     try {
-        const userFound = await findUserByUsername(inputData.username);
+        const userFound = await findUserByUsername(inputData.email);
 
         if(! userFound){
             return res.json({
@@ -43,8 +43,8 @@ async function register(req, res){
     const inputData = req.body
 
     try {
-        const userFound = await findUserByUsername(inputData.username);
-
+        const userFound = await findUserByUsername(inputData.email);
+        
         if(userFound){
             return res.json({
                 ok: false,
@@ -82,7 +82,35 @@ async function register(req, res){
     
 }
 
+
+// const renewToken = ( req, res ) => {
+//     const userData = req.authUser
+//     const {id} = userData
+
+//     delete userData.iat;
+//     delete userData.exp;
+
+//     const userFound = UserModel.findById( id );
+
+//     if(! userFound){
+//         res.json({
+//             ok: false,
+//             msg: 'el ususario no existe no genere el token'
+//         });
+//     }
+    
+//     const newToken = generateToken({ ...userData});
+
+//     resjson({
+//         ok:true,
+//         token: newToken,
+//         userData
+//     })
+// }
+
 module.exports = {
     login,
-    register
+    register,
+    // renewToken
+    
 }

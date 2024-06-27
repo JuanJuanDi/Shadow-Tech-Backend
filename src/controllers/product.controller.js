@@ -43,10 +43,11 @@ async function getProductById(request, response){
 
     try {
         const data = await getOneProductById(id)// con esto estoy cacturando el aid del producto que biene cona la url
-    response.json({
-        ok:true,
-        data
-    })
+        
+        response.json({
+            ok:true,
+            data
+        })
     } catch (error) {
         console.error(error)
         response.json({

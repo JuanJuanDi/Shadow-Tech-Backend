@@ -10,7 +10,7 @@ const router = Router();                 //imvocamos el router de express
 // definir las rutas para la entidad 'product'
 
 //C: Create ->http://locahost:3000/apis/product/
-router.post('/', [verifyToken, isModerator], createProduct)
+router.post('/', [verifyToken, isModerator ], createProduct) //
 //R: Read ->http://locahost:3000/apis/product/
 
 
@@ -22,9 +22,9 @@ router.get('/:id', getProductById);
 // router.put('/:id',updateProductByid)
 
 
-router.patch('/:id', verifyToken, updateProductByid)
+router.patch('/:id',  updateProductByid) //verifyToken,
 //D: Delete ->http://locahost:3000/apis/product/<espera-por-ID>
-router.delete('/:id',[verifyToken, isAdmin], deleteProductByid)
+router.delete('/:id',deleteProductByid)//[verifyToken, isAdmin], 
 
 
 module.exports = router;    //exportar todas las rutas disponibles para toda la aplicacion
