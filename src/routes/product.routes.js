@@ -1,6 +1,6 @@
 const { Router } = require( 'express' ); //importamos el router de express 
 const { createProduct, getProducts, updateProductByid, deleteProductByid, getProductById } = require('../controllers/product.controller');
-const { verifyToken, isAdmin, isModerator } = require('../middlewares');
+
 
 
 
@@ -10,7 +10,7 @@ const router = Router();                 //imvocamos el router de express
 // definir las rutas para la entidad 'product'
 
 //C: Create ->http://locahost:3000/apis/product/
-router.post('/', [verifyToken, isModerator ], createProduct) //
+router.post('/', createProduct) // [verifyToken, isModerator ]
 //R: Read ->http://locahost:3000/apis/product/
 
 

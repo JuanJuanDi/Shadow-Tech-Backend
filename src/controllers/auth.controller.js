@@ -1,7 +1,8 @@
 const { compareSync } = require("bcrypt");
 const { findUserByUsername, registerUser } = require("../services/auth.services");
 const { generateToken } = require("../helpers/jwt.helpers");
-
+const RoleModel = require("../models/Role");
+const UserModel = require("../models/User");
 
 
 
@@ -9,6 +10,7 @@ async function login(req, res){
     const inputData = req.body
     try {
         const userFound = await findUserByUsername(inputData.email);
+        console.log(userFound)
 
         if(! userFound){
             return res.json({
@@ -24,16 +26,24 @@ async function login(req, res){
                 msg: 'password invalido'
             })
         }
+        const userData = userFound.toObject();
+        delete userData.password
+
+        console.log(userData)
+
+
         const payload = {
-            id: userFound.id,
-            username: userFound.username,
-            email:userFound.email
+            id: userData._id,
+            username: userData.username,
+            email:userData.email,
+            role: userData.role
         }
         const token = generateToken(payload)
 
         // const token = jwt.sing({id: userFound, username: userFound, email:userFound}, process.env.SECRET_JWT_SEED,)
-        if(inputData)
-        res.json({ok: true, msg:'iniciando secion', token})
+        if(inputData){
+            res.json({ok: true, msg:'iniciando sesion', token, user: payload})
+        }
     } catch (error) {
         
     }
@@ -61,12 +71,17 @@ async function register(req, res){
         }
 
         console.log(inputData)
-        registerUser(inputData)
+        const userRegistered = await registerUser(inputData)
+
+
+        const dataRegister = userRegistered.toObject()
+        console.log( dataRegister )
 
         const payload = {
-            id: inputData.id,
-            username: inputData.username,
-            email:inputData.email
+            id: dataRegister.id,
+            username: dataRegister.username,
+            email:dataRegister.email,
+            role: dataRegister.role
         }
         const token = generateToken(payload);
 
@@ -82,35 +97,35 @@ async function register(req, res){
     
 }
 
-
-// const renewToken = ( req, res ) => {
-//     const userData = req.authUser
-//     const {id} = userData
-
-//     delete userData.iat;
-//     delete userData.exp;
-
-//     const userFound = UserModel.findById( id );
-
-//     if(! userFound){
-//         res.json({
-//             ok: false,
-//             msg: 'el ususario no existe no genere el token'
-//         });
-//     }
+const renewToken = ( req, res ) => {
+    const userData = req.authUser
     
-//     const newToken = generateToken({ ...userData});
+    const {id} = userData
 
-//     resjson({
-//         ok:true,
-//         token: newToken,
-//         userData
-//     })
-// }
+    delete userData.iat;
+    delete userData.exp;
+
+    const userFound = UserModel.findById( id );
+
+    if(! userFound){
+        res.json({
+            ok: false,
+            msg: 'el ususario no existe no genere el token'
+        });
+    }
+    
+    const newToken = generateToken({ ...userData});
+
+    res.json({
+        ok:true,
+        token: newToken,
+        userData
+    })
+}
 
 module.exports = {
     login,
     register,
-    // renewToken
+    renewToken
     
 }

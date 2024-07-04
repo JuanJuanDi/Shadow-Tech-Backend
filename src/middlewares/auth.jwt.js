@@ -1,3 +1,4 @@
+const { validateToken } = require('../helpers/jwt.helpers');
 const RoleModel = require('../models/Role');
 const UserModel = require('../models/User');
 const  jwt = require('jsonwebtoken');
@@ -49,8 +50,36 @@ const isAdmin = async ( req, res, next) =>{
 
 }
 
+const authUser = ( req, res, next ) =>{
+    const token = req.header('X-Token');
+    console.log(token)
+    if(!token){
+        return res.json({
+            ok:false,
+            msg:'Error al obtener el token'
+        })
+    }
+
+    try {
+        
+        const payload = validateToken( token )
+        console.log(payload)
+        req.authUser = payload;
+
+        next();
+
+    } catch (error) {
+        console.error(error)
+        return res.json({
+            ok:false,
+            msg: 'Token no valido '
+        })
+    }
+}
+
 module.exports = {
     verifyToken,
     isModerator,
-    isAdmin
+    isAdmin,
+    authUser
 }
